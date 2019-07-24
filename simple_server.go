@@ -24,7 +24,9 @@ func handle(conn net.Conn) {
 			continue
 		}
 
-		fmt.Println("Receive data [%s] from [%s]", string(data[:n]), conn.RemoteAddr())
+		conn.Write(data)
+
+		fmt.Printf("Receive data [%s] from [%s]", string(data[:n]), conn.RemoteAddr())
 	}
 }
 

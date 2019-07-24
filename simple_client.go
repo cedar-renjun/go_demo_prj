@@ -12,11 +12,19 @@ func establishConn(i int) net.Conn {
 		return nil
 	}
 
-	fmt.Printf("[%d] Connect to localhost:8899 success\r\n", i)
 	defer conn.Close()
 
 	str := "hello,world"
 	conn.Write([]byte(str))
+	fmt.Printf("[%04d] >>> %s\r\n", i, str)
+
+	data := make([]byte, 2048)
+	n, err := conn.Read(data)
+	if nil != err {
+		fmt.Println(err)
+		return nil
+	}
+	fmt.Printf("       <<< %s\r\n\r\n", string(data[:n]))
 
 	return conn
 }
@@ -28,6 +36,7 @@ func main() {
 	fmt.Println("client start!")
 
 	for i := 0; i < 1000; i++ {
+		//time.Sleep(time.Second * 1)
 		conn := establishConn(i)
 		if nil != conn {
 			s1 = append(s1, conn)
