@@ -1,17 +1,27 @@
 package main
 
-import "fmt"
-import "net"
+import (
+	"fmt"
+	"net"
+)
 
 func main() {
 
-	ipAddr := "192.168.1.179"
-	addr := net.ParseIP(ipAddr)
-	if nil == addr {
-		fmt.Println("unavaliable addr")
-	} else {
-		fmt.Println("got ip", addr.To16())
+	fmt.Println("client start!")
+
+	conn, err := net.Dial("tcp", ":8899")
+	if nil != err {
+		fmt.Println(err)
+		return
 	}
 
-	fmt.Println("hello,world")
+	fmt.Println("Connect to localhost:8899 success")
+	defer conn.Close()
+
+	str := "hello,world"
+	conn.Write([]byte(str))
+
+	fmt.Println("client finish")
+
+	return
 }
