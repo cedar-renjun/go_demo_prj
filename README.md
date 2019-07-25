@@ -4,16 +4,19 @@
 2. 中转服务器S
 3. 计算服务器（集群），简单计算，loopback原样返回
 
+初步设计，框架如下所示
+![go demo arch v1.0.png](./pic/go demo arch v1.0.png)
+
 注意事项：
 1. 并发性能
-2. 代码规范(ref PCG go specs)
+2. 代码规范(ref PCG go 编程规范)
 
 ## 2. 步骤和计划
 1. 【DONE】熟悉go基础语法，绘制[思维导图](./go_xmind.pdf)
-2. 【DONE】编写简单的CS socket代码 [simple_client.go](./simple_client.go) [simple_server.go](./simple_server.go) ，支持并发通信，测试效果 ![simple_cs_go_v1.0.png](./simple_cs_go_v1.0.png)
+2. 【DONE】编写简单的CS socket代码 [simple_client.go](./simple_client.go) [simple_server.go](./simple_server.go) ，支持并发通信，测试效果 ![simple_cs_go_v1.0.png](./pic/simple_cs_go_v1.0.png)
 3. 【DONE】编写TCP反向代理服务器 [simple_tcp_repost.go](./simple_tcp_repost.go) 和计算服务器  [simple_server.go](./simple_server.go)  
 	1. 暂时支持单计算节点，还没添加集群节点
-4. 【DONE】调通整个链路，效果如图 ![simple_s_i_c_go_v1.1.png](./simple_s_i_c_go_v1.1.png)
+4. 【DONE】调通整个链路，效果如图 ![simple_s_i_c_go_v1.1.png](./pic/simple_s_i_c_go_v1.1.png)
 5. 【TODO】支持多节点集群
 6. 【TODO】优化服务器端代码，提高并发性能（job缓存，任务队列）
 7. 【TODO】测试现有go并发框架(chitchat and nginx)
