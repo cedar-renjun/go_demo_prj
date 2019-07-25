@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net"
+	"flag"
+	//"os"
 )
 
 func handle(conn net.Conn) {
@@ -32,15 +34,19 @@ func handle(conn net.Conn) {
 
 func main() {
 
-	fmt.Println("Start server")
+	port := flag.String("port", ":8888", "tcp listen port")
 
-	listener, err := net.Listen("tcp", ":8899")
+	flag.Parse()
+
+	fmt.Println("Start server port: ", *port)
+
+	listener, err := net.Listen("tcp", *port)
 	if nil != err {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println("Start listen localhost :8899")
+	fmt.Println("Start listen localhost", *port)
 	for {
 		conn, err := listener.Accept()
 		if nil != err {
