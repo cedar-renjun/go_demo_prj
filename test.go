@@ -3,22 +3,26 @@ package main
 import (
     //"flag"
     "fmt"
-    "strconv"
+    //"strconv"
 )
 
-var server_addrs = [] string {":8890", ":8891",":8892",":8893"}
+func f() (result int){
+
+	defer func(result int){
+		fmt.Println("defer")
+		result += 5
+	}(result)
+
+	fmt.Println("fun finish")
+	return 1
+}
 
 func main() {
 
-	str := strconv.Itoa(134)
-	str1 := "hello,world"
-	str2 := str1+str
-	fmt.Println(str2)
+	res := 0
 
-	for i:= 0; i < 4; i++{
-		fmt.Println(server_addrs[i])
-	}
+	res = f()
 
-	fmt.Println("finish")
+	fmt.Println("finish", res)
 }
 
