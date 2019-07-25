@@ -6,7 +6,7 @@ import (
 )
 
 func establishConn(i int) net.Conn {
-	conn, err := net.Dial("tcp", ":8899")
+	conn, err := net.Dial("tcp", ":8898")
 	if nil != err {
 		fmt.Println(err)
 		return nil
