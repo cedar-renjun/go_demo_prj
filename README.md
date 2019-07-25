@@ -5,7 +5,7 @@
 3. 计算服务器（集群），简单计算，loopback原样返回
 
 初步设计，框架如下所示
-![go demo arch v1.0.png](./pic/go demo arch v1.0.png)
+![go demo arch](./pic/go_demo_arch_v1.0.png)
 
 注意事项：
 1. 并发性能
