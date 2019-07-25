@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"strconv"
 )
 
 func establishConn(i int) net.Conn {
@@ -14,7 +15,7 @@ func establishConn(i int) net.Conn {
 
 	defer conn.Close()
 
-	str := "hello,world"
+	str := "hello,world " + strconv.Itoa(i)
 	conn.Write([]byte(str))
 	fmt.Printf("[%04d] >>> %s\r\n", i, str)
 

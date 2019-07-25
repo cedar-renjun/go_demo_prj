@@ -8,6 +8,8 @@ import (
 	"sync"
 )
 
+var server_addrs = [] string {":8890", ":8891",":8892",":8893"}
+
 func main() { // 没有直接在 main 写是因为把统一的操作封装在一个函数中比较利于以后的扩展
 	fmt.Println("repost server start")
 	forword() // 转发函数
@@ -38,13 +40,16 @@ func forword() {
 func handle(localConn net.Conn, cnt int) {
 	var wg sync.WaitGroup
 
-	remoteConn, err := net.Dial("tcp", ":8899") // 转发到的 ip 地址，以及端口，请替换为你需要和目标地址
+	i_port := server_addrs[cnt%4]
+
+	//remoteConn, err := net.Dial("tcp", ":8899") // 转发到的 ip 地址，以及端口，请替换为你需要和目标地址
+	remoteConn, err := net.Dial("tcp", i_port) // 转发到的 ip 地址，以及端口，请替换为你需要和目标地址
 	if err != nil {
 		localConn.Close()            // 远程 地址链接失败所以，本地监听也没有意义，所以直接关闭 掉
 		log.Fatalln("远程链接建立失败", err) // 打印错误并退出程序
 	}
 
-	fmt.Printf("[%04d] repost msg\r\n", cnt)
+	fmt.Printf("[%08d] repost msg\r\n", cnt)
 
 	wg.Add(2)
 	go func(local net.Conn, remote net.Conn) {

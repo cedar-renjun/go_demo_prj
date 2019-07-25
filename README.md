@@ -24,9 +24,11 @@
 1. 【DONE】熟悉go基础语法，绘制[思维导图](./go_xmind.pdf)
 2. 【DONE】编写简单的CS socket代码 [simple_client.go](./simple_client.go) [simple_server.go](./simple_server.go) ，支持并发通信，测试效果 ![simple_cs_go_v1.0.png](./pic/simple_cs_go_v1.0.png)
 3. 【DONE】编写TCP反向代理服务器 [simple_tcp_repost.go](./simple_tcp_repost.go) 和计算服务器  [simple_server.go](./simple_server.go)  
-	1. 暂时支持单计算节点，还没添加集群节点
 4. 【DONE】调通整个链路，效果如图 ![simple_s_i_c_go_v1.1.png](./pic/simple_s_i_c_go_v1.1.png)
-5. 【TODO】支持多节点集群
+5. 【DONE】支持多节点集群
+	1. 暂时支持4个服务器节点，在本地部署，分别监听8890, 8891, 8892, 8893端口，如图 ![4_server_listen.png](./pic/4_server_listen.png)
+	2.  当前服务器分配的方式，采用轮询分配的方式，依次将包转发给1-2-3-4服务器，如图 ![dispatch_tcp_to_4_server.png](./pic/dispatch_tcp_to_4_server.png)
+	3.  服务器端的代码，采用flag命令解析指定监听端口
 6. 【TODO】优化服务器端代码，提高并发性能（job缓存，任务队列）
 7. 【TODO】测试现有go并发框架(chitchat and nginx)
 
@@ -35,3 +37,4 @@
 为了简化计算，先假设
    1. 集群的数量是固定的，IP也是固定的，手工分配
    2. 简化负载均衡算法：找到空闲server，然后将TCP数据流转发到这个server
+
