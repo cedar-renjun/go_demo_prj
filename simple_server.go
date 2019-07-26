@@ -1,9 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net"
-	"flag"
+	"runtime"
 	//"os"
 )
 
@@ -37,8 +38,9 @@ func main() {
 	port := flag.String("port", ":8888", "tcp listen port")
 
 	flag.Parse()
-
 	fmt.Println("Start server port: ", *port)
+
+	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	listener, err := net.Listen("tcp", *port)
 	if nil != err {

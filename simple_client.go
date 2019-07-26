@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"runtime"
 	"strconv"
 )
 
@@ -33,8 +34,9 @@ func establishConn(i int) net.Conn {
 func main() {
 
 	var s1 []net.Conn
-
 	fmt.Println("client start!")
+
+	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	for i := 0; i < 1000; i++ {
 		//time.Sleep(time.Second * 1)

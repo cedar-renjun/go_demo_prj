@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"runtime"
 	"sync"
 )
 
-var server_addrs = [] string {":8890", ":8891",":8892",":8893"}
+var server_addrs = []string{":8890", ":8891", ":8892", ":8893"}
 
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	fmt.Println("repost server start")
 	forword()
 }
@@ -61,4 +63,6 @@ func handle(localConn net.Conn, cnt int) {
 		local.Close()
 	}(localConn, remoteConn)
 	wg.Wait()
+
+	// this
 }
