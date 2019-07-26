@@ -29,7 +29,72 @@
 	1. 暂时支持4个服务器节点，在本地部署，分别监听8890, 8891, 8892, 8893端口，如图 ![4_server_listen.png](./pic/4_server_listen.png)
 	2.  当前服务器分配的方式，采用轮询分配的方式，依次将包转发给1-2-3-4服务器，如图 ![dispatch_tcp_to_4_server.png](./pic/dispatch_tcp_to_4_server.png)
 	3.  服务器端的代码，采用flag命令解析指定监听端口
-6. **【<font color=red>TODO</font>】** 优化服务器端代码，提高并发性能（job缓存，任务队列）
+6. **【<font color=blue>DONE</font>】** 优化服务器端代码，提高并发性能（job缓存，任务队列）
+	1.  nginx的核心并发原理是：多个worker进程+异步IO事件，同时采用锁机制，避免同时唤醒多个进程
+	2.  在计算服务器上，采用类似原理，发送消息通知到worker任务队列
+	3.  每个计算server最大worker数量是20W，简单echo测试OK
+	4.  【TODO】待优化中转代理服务器代码
+	5.  核心代码如下
+``` go
+// ------ job & worker arch ------
+
+type Job interface {
+	Do()
+}
+
+type Worker struct {
+	JobQueue chan Job
+}
+
+func NewWorker() Worker {
+	return Worker{JobQueue: make(chan Job)}
+}
+
+func (w Worker) Run(wq chan chan Job) {
+	go func() {
+		for {
+			wq <- w.JobQueue
+			select {
+			case job := <-w.JobQueue:
+				job.Do()
+			}
+		}
+	}()
+}
+
+type WorkerPool struct {
+	workerlen   int
+	JobQueue    chan Job
+	WorkerQueue chan chan Job
+}
+
+func NewWorkerPool(workerlen int) *WorkerPool {
+	return &WorkerPool{
+		workerlen:   workerlen,
+		JobQueue:    make(chan Job),
+		WorkerQueue: make(chan chan Job, workerlen),
+	}
+}
+
+func (wp *WorkerPool) Run() {
+	fmt.Println("init worker")
+	for i := 0; i < wp.workerlen; i++ {
+		worker := NewWorker()
+		worker.Run(wp.WorkerQueue)
+	}
+
+	go func() {
+		for {
+			select {
+			case job := <-wp.JobQueue:
+				worker := <-wp.WorkerQueue
+				worker <- job
+			}
+		}
+	}()
+}
+```
+	
 7. **【<font color=red>TODO</font>】** 测试现有go并发框架(chitchat and nginx)
 
 
