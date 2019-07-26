@@ -10,6 +10,8 @@ import (
 
 var server_addrs = []string{":8890", ":8891", ":8892", ":8893"}
 
+//var server_addrs = []string{":8890", ":8890", ":8890", ":8890"}
+
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	fmt.Println("repost server start")
